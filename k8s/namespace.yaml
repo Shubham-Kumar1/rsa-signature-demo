@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rsa-signature-demo
+  labels:
+    name: rsa-signature-demo
+    app: rsa-signature-demo

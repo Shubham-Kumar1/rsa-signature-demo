@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: rsa-signature-demo
+
+resources:
+- namespace.yaml
+- configmap.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+- hpa.yaml
+- pdb.yaml
+- monitoring.yaml
+
+commonLabels:
+  app: rsa-signature-demo
+  version: v1.0.0
+
+images:
+- name: rsa-signature-demo
+  newName: docker.io/kumarshubham16/rsa-signature-demo
+  newTag: latest

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rsa-signature-config
+  namespace: rsa-signature-demo
+  labels:
+    app: rsa-signature-demo
+data:
+  # Environment configuration
+  NODE_ENV: "production"
+  # App-specific settings
+  APP_TITLE: "RSA Digital Signature Demo"
+  APP_DESCRIPTION: "Secure • Interactive • Real-time"

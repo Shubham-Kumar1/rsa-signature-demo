@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rsa-signature-demo-monitor
+  namespace: rsa-signature-demo
+  labels:
+    app: rsa-signature-demo
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: rsa-signature-demo
+  endpoints:
+  - port: http
+    path: /health
+    interval: 30s
+    scrapeTimeout: 10s
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rsa-signature-demo-monitoring
+  namespace: rsa-signature-demo
+  labels:
+    app: rsa-signature-demo
+data:
+  prometheus-rules.yaml: |
+    groups:
+    - name: rsa-signature-demo
+      rules:
+      - alert: RSASignatureDemoDown
+        expr: up{app="rsa-signature-demo"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RSA Signature Demo is down"
+          description: "RSA Signature Demo has been down for more than 1 minute"
+      
+      - alert: RSASignatureDemoHighCPU
+        expr: rate(container_cpu_usage_seconds_total{app="rsa-signature-demo"}[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RSA Signature Demo high CPU usage"
+          description: "RSA Signature Demo is using more than 80% CPU for 5 minutes"
+      
+      - alert: RSASignatureDemoHighMemory
+        expr: (container_memory_usage_bytes{app="rsa-signature-demo"} / container_spec_memory_limit_bytes{app="rsa-signature-demo"}) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RSA Signature Demo high memory usage"
+          description: "RSA Signature Demo is using more than 80% memory for 5 minutes"

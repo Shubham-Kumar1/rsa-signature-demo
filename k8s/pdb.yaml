@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: rsa-signature-demo-pdb
+  namespace: rsa-signature-demo
+  labels:
+    app: rsa-signature-demo
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: rsa-signature-demo

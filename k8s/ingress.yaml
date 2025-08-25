@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rsa-signature-demo-ingress
+  namespace: rsa-signature-demo
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - digital.shubham.it.com
+      secretName: digital-shubham-it-com-tls
+  rules:
+    - host: digital.shubham.it.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rsa-signature-demo-service
+                port:
+                  number: 80
